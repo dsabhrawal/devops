@@ -1,0 +1,38 @@
+pipeline {
+    tools{
+        jdk 'Java8'
+        maven 'localmaven'
+    }
+    agent any
+    stages {
+        stage('checkout') {
+            agent any
+            steps {
+                git credentialsId: '3beae218-44b7-43de-8363-1011c7091610', url: 'https://github.com/dsabhrawal/springboot-example.git'
+            }
+        }
+        stage('compile') {
+            agent any
+            steps {
+               sh 'mvn compile' 
+            }
+        }
+        stage('test') {
+            agent any
+            steps {
+               sh 'mvn test' 
+            }
+            post{
+                always{
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+        stage('package') {
+            agent any
+            steps {
+               sh 'mvn package' 
+            }
+        }
+    }
+}
