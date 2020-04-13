@@ -1,0 +1,49 @@
+Virtualization vs container
+===========================
+
+containers are much faster than traditional virtualization approach.
+Virtualization is done at software level and containers are at software level.
+Efficient usages of hardware in containers.
+No special virtualization technology is required in containers.
+Binaries, application are bind in a single container.
+Guest OS is not required containers, hence faster execution.
+
+
+Docker Compnents
+================
+1. Docker Client
+2. Docker Daemon
+3. Docker Registry
+
+Docker Commands
+==============
+docker version   #client and server version
+docker --version #version of docker 
+docker run hello-world #run sample hello-world application
+docker pull ubuntu   #pull ubuntu image into local repository
+docker images   #list all the images in local repository
+docker ps    #running containers
+docker ps -a  #all containers including inactive
+docker run -it ubuntu  #run ubuntu and get attached to ubuntu shell (it is interactive mode)
+docker run -itd ubuntu #run ubuntu in detached mode and keep container running in background
+ctrl+p & ctrl+q #come out of the container and left container in running state
+exit #exit the container 
+docker start <container_id> #start the given container
+docker stop <container_id>  #stop the given container
+docker rm <container_id>  #remove the given container
+docker rmi <image_id>  #remove the images in local repository
+docker attach <container_id> #attach to shell of a running container
+docker volume ls  #list all the docker volumes created
+docker volume create vol1 #create one volume with vol1 name
+docker volume inspect vol1  #shows details of vol1
+docker run -it --name ubuntu1 -v vol1:/data ubuntu  #create ubuntu container with name ubuntu1 in interactive mode and mount vol1 at /data location in ubuntu
+docker volume rm vol1  #delete volume vol1 when vol1 is not attached to any container
+
+Bind mounts
+-----------
+docker run -it --name ubuntu2 -v /home/deepak/dockervolume/:/data:Z ubuntu #run container by using given directory as volume Z is used for permission on /data directory on container
+ - faster than volumes
+ - any directory can be used as docker volumes
+ - docker volumes are bouond to specific directory
+
+docker run -it --name container2 --volumes-from container1 ubuntu #copy all the attach volumes to container1
