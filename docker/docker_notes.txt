@@ -47,3 +47,15 @@ docker run -it --name ubuntu2 -v /home/deepak/dockervolume/:/data:Z ubuntu #run 
  - docker volumes are bouond to specific directory
 
 docker run -it --name container2 --volumes-from container1 ubuntu #copy all the attach volumes to container1
+
+Docker Network
+--------------
+docker network ls #List all the docker networks
+docker inspect <container_id> #Inspect a running container
+docker network create --driver bridge mynetwork #create new network with name mynetwork, by this way containers can communicate with each other using id rather than ip address
+docker run -itd --name con3 --network mynetwork ubuntu:latest  #run container in specific network
+docker run -itd --name con4 --network mynetwork ubuntu:latest  #con3 and con4 can communicate with each other using names con3 and con4 (not possible for defualt bridge networks)
+#ping con4 will run successfully from con3 and this is called automatic service discovery
+
+
+
