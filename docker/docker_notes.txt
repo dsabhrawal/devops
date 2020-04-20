@@ -57,5 +57,9 @@ docker run -itd --name con3 --network mynetwork ubuntu:latest  #run container in
 docker run -itd --name con4 --network mynetwork ubuntu:latest  #con3 and con4 can communicate with each other using names con3 and con4 (not possible for defualt bridge networks)
 #ping con4 will run successfully from con3 and this is called automatic service discovery
 
+docker run -itd --name server nginx:latest #run the nginx server locally on port 80 and would be accessible within container ip
+docker run -itd --name server -P nginx:latest #-P let host to use the guest port 80 on a random mentioned port
+docker run -itd --name server -p 8181:80 nginx:latest #service running on port 80 will be accessible on 8181 port on guest OS
+
 
 
