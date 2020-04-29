@@ -61,5 +61,27 @@ docker run -itd --name server nginx:latest #run the nginx server locally on port
 docker run -itd --name server -P nginx:latest #-P let host to use the guest port 80 on a random mentioned port
 docker run -itd --name server -p 8181:80 nginx:latest #service running on port 80 will be accessible on 8181 port on guest OS
 
+docker-machine
+--------------
+docker-machine create --driver virtualbox dev  #create a docker machine with env name dev on virtualbox
+docker-machine ls  #list all docker machines
+eval $(docker-machine env dev)  #switching shell to dev env 
+docker-machine active     #mark shell active of current env
+docker-machine ip dev  #IP ADDRESS of running docker host on docker machine
+eval $(docker-machine env -u)  #Detach the shell from docker machine environment
+
+docker swarm
+$docker swarm init --advertise-addr 192.168.99.105 #initialize swarm cluster
+$docker node ls   # List of nodes
+$docker swarm join --token <Join token> #Joining a running cluster
+$docker swarm join-token manager #Get the join token to join as manager
+$docker swarm join-token worker #Get the join token to join as worker
+$docker service create --name webservice -p 8001:80 nginx:latest #Create a service
+$docker service ps webservice  #Check where the service is running in a cluster
+$docker node update --availability drain manager #set the availability of a manager node
+$docker service scale webservice=10 #Scaling a service 
+
+
+
 
 
