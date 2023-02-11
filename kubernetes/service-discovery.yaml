@@ -1,0 +1,114 @@
+apiVersion: v1 
+kind: Namespace
+metadata:
+  name: service-discovery
+  labels:
+    app: counter
+
+---
+# Data tier 
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: data-tier
+  labels:
+    name: microservices 
+    tier: data
+spec:
+  containers:
+  - name: redis 
+    image: redis:latest
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        memory: "64Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 6379
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: data-tier
+  labels:
+    name: microservices
+spec:
+  selector:
+    tier: data
+  ports:
+  - port: 6379
+    protocol: TCP 
+    name: redis 
+  type: ClusterIP #default service type  
+
+---
+#app tier 
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-tier
+  labels:
+    name: microservices
+    tier: app
+spec:
+  containers:
+  - name: server
+    image: lrakai/microservices:server-v1
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 8080
+    env:
+    - name: REDIS_URL
+      value: redis://${DATA_TIER_SERVICE_HOST}:${DATA_TIER_SERVICE_PORT_REDIS} #These env variables are populated automatically 
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-tier
+  labels:
+    name: microservices
+spec:
+  selector:
+    tier: app
+  ports:
+  - port: 8080
+  
+---
+#support tier 
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: support-tier
+  labels:
+    name: microservices
+    tier: support
+spec:
+  containers:
+  - name: poller
+    image: lrakai/microservices:poller-v1
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    env:
+    - name: API_URL
+      value: http://app-tier:${APP_TIER_SERVICE_PORT}
+  
+  - name: counter
+    image: lrakai/microservices:counter-v1
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    env:
+    - name: API_URL
+      value: http://app-tier.service-discovery:8080
