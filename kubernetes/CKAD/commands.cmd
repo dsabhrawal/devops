@@ -41,3 +41,11 @@ Service
 =======
 kubectl expose pod redis --port=6379 --name redis-service --dry-run=client -o yaml
 kubectl create service clusterip redis --tcp=6379:6379 --dry-run=client -o yaml (assume selectors as app=redis)
+#Create a Service named nginx of type NodePort to expose pod nginx's port 80 on port 30080 on the nodes (can not specify NodePort)
+kubectl expose pod nginx --port=80 --name nginx-service --type=NodePort --dry-run=client -o yaml
+
+
+kind cluster
+============
+#load images 
+kind load docker-image ubuntu:sleeper -n c1
