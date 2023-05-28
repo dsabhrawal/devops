@@ -49,3 +49,7 @@ kind cluster
 ============
 #load images 
 kind load docker-image ubuntu:sleeper -n c1
+
+Taint and Tolerant
+============
+kubectl taint node node-name key=value:taint-effect (NoSchedule/PreferNoSchdule/NoExecute)
