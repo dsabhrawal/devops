@@ -1,0 +1,15 @@
+The Major difference between replicationcontroller and ReplicSet is ReplicaSet has additional 
+property Selector, hence it can manager the pods those are not part of the Replicaset definition file. 
+selector:
+  matchLabels:
+    keyA: value-a  
+
+
+* When a service is created a default DNS entry is done as follows
+ex: db-service.dev.svc.cluster.local
+
+cluster.local -- Domain 
+svc -- Subdomain
+dev -- namespace
+db-service -- service resource name
+

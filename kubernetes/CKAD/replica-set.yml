@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: app-rs
+spec:
+  template:
+    metadata:
+      name: backend
+      labels:
+        type: app-server
+    spec:
+      containers:
+        - name: nginx-backend
+          image: nginx
+  replicas: 4
+  selector:
+    matchLabels:
+      type: front-end
+      type: app-server
